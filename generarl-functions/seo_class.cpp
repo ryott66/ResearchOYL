@@ -1,10 +1,9 @@
 #include "seo_class.hpp"
+    // 静的カウンタの初期化
+    int SEO::idCounter = 0;
+
     // コンストラクタ（パラメータの初期設定）
-    SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
-        : R(r), Rj(rj), Cj(cj), C(c), Vd(vd), Q(0.0), Vn(0.0), legs(legscounts), 
-        V(legscounts, 0.0), q(legscounts, 0.0),connection(legscounts, 0){
-        idCounter = 0;
-        id = idCounter++;
+    SEO::SEO() :R(0), Rj(0), Cj(0), C(0), Vd(0), Q(0), Vn(0), legs(0) {
         dE["up"] = 0.0;
         dE["down"] = 0.0;
         wt["up"] = 0.0;
@@ -12,12 +11,19 @@
         tunnel = "";
     }
 
-    //-----------セッター------------//
-    // idCounterを初期化
-    void SEO::setidCounter(){
-        idCounter = 0;
+    SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
+        : R(r), Rj(rj), Cj(cj), C(c), Vd(vd), Q(0.0), Vn(0.0), legs(legscounts), 
+        V(legscounts, 0.0), q(legscounts, 0.0),connection(legscounts, 0){
+        id = idCounter++;
+        dE["up"] = 0.0;
+        dE["down"] = 0.0;
+        wt["up"] = 0.0;
+        wt["down"] = 0.0;
+        tunnel = "";
+        // cout << "SEO object created." << endl;
     }
 
+    //-----------セッター------------//
     // バイアス電圧を設定
     void SEO::setVias(const double vd) {
         Vd = vd;
@@ -103,7 +109,42 @@
         return dist(mt);
     }
 
-    // テスト用
+    //-------- テスト用 -----------//
+    // テスト用Rゲッター
+    double SEO::getR() const{
+        return R;
+    }
+    
+    // テスト用Rjゲッター
+    double SEO::getRj() const{
+        return Rj;
+    }
+    
+    // テスト用Cjゲッター
+    double SEO::getCj() const{
+        return Cj;
+    }
+    
+    // テスト用Cゲッター
+    double SEO::getC() const{
+        return C;
+    }
+
+    // テスト用Vdゲッター
+    double SEO::getVd() const{
+        return Vd;
+    }
+    
+    // テスト用legsゲッター
+    int SEO::getlegs() const{
+        return legs;
+    }
+
+
+    // テスト用idCounterゲッター
+    int SEO::getidCounter() const {
+        return idCounter;
+    }
     // テスト用dEセッター
     void SEO::setdE(const string& direction, double value){
         dE[direction] = value;

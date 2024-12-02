@@ -1,6 +1,7 @@
 #ifndef SEO_CLASS_HPP
 #define SEO_CLASS_HPP
 
+#include <iostream>
 #include <vector>
 #include <map>
 #include <string>
@@ -15,16 +16,16 @@ using namespace std;
 
 class SEO {
 private:
-    int idCounter;   // 静的IDカウンタ
+    static int idCounter;   // 静的IDカウンタ
     int id;                 // ノードのID
     double Q;               // ノード電荷
     double Vn;              // ノード電圧
     double Vd;              // バイアス電圧
-    const double R;         // 抵抗
-    const double Rj;        // トンネル抵抗
-    const double Cj;        // 接合容量
-    const double C;         // 接続容量
-    const int legs;         // 足の数
+    double R;         // 抵抗
+    double Rj;        // トンネル抵抗
+    double Cj;        // 接合容量
+    double C;         // 接続容量
+    int legs;         // 足の数
     vector<double> V;       // 周囲のノード電圧
     vector<double> q;       // 足の数に対応した接続キャパシタの電荷
     map<string, double> dE; // エネルギー変化量(up, down)
@@ -34,6 +35,7 @@ private:
 
 public:
     // コンストラクタ（パラメータの初期設定）
+    SEO();
     SEO(double r, double rj, double cj, double c, double vd, int legscounts);
 
     //-----------セッター------------//
@@ -72,7 +74,28 @@ public:
     // 0から1の間の乱数を生成
     double Random();
 
-    // テスト用
+    //-------- テスト用 -------------//
+    // テスト用idCounterゲッター
+    int getidCounter() const;
+
+    // テスト用Rゲッター
+    double getR() const;
+    
+    // テスト用Rjゲッター
+    double getRj() const;
+    
+    // テスト用Cjゲッター
+    double getCj() const;
+    
+    // テスト用Cゲッター
+    double getC() const;
+
+    // テスト用Vdゲッター
+    double getVd() const;
+    
+    // テスト用legsゲッター
+    int getlegs() const;
+
     // テスト用dEセッター
     void setdE(const string& direction, double value);
 

@@ -21,27 +21,25 @@ private:
     double Q;               // ノード電荷
     double Vn;              // ノード電圧
     double Vd;              // バイアス電圧
-    double R;         // 抵抗
-    double Rj;        // トンネル抵抗
-    double Cj;        // 接合容量
-    double C;         // 接続容量
-    int legs;         // 足の数
+    double R;               // 抵抗
+    double Rj;              // トンネル抵抗
+    double Cj;              // 接合容量
+    double C;               // 接続容量
+    int legs;               // 足の数
     vector<double> V;       // 周囲のノード電圧
-    vector<double> q;       // 足の数に対応した接続キャパシタの電荷
     map<string, double> dE; // エネルギー変化量(up, down)
     map<string, double> wt; // トンネル待時間(up, down)
     string tunnel;          // トンネルの有無("", up, down)
     vector<int> connection; // 接続されている素子のID
 
 public:
-    // コンストラクタ（パラメータの初期設定）
+    //-----------コンストラクタ---------// 
+    // vectorの初期化用
     SEO();
+    // 引数あり初期設定用
     SEO(double r, double rj, double cj, double c, double vd, int legscounts);
 
     //-----------セッター------------//
-    // idCounterを初期化
-    void setidCounter();
-
     // バイアス電圧を設定
     void setVias(const double vd);
 
@@ -50,6 +48,9 @@ public:
 
     // 周囲の電圧を設定
     void setSurroundingVoltages(const vector<SEO>& SEOs);
+
+    // 振動子のパラメータ計算
+    void setPcalc();
 
     //-----------ゲッター------------//
     // IDを取得

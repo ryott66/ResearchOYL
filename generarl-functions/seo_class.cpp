@@ -13,7 +13,7 @@
 
     SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
         : R(r), Rj(rj), Cj(cj), C(c), Vd(vd), Q(0.0), Vn(0.0), legs(legscounts), 
-        V(legscounts, 0.0), q(legscounts, 0.0),connection(legscounts, 0){
+        V(legscounts, 0.0), connection(legscounts, 0){
         id = idCounter++;
         dE["up"] = 0.0;
         dE["down"] = 0.0;
@@ -50,6 +50,13 @@
             }
             V[i] = SEOs[connectedID].getNodeVoltage();  // 接続先のVnを取得して設定
         }
+    }
+
+    // 振動子のパラメータ計算
+    void SEO::setPcalc(){
+        // V1,V2,・・・の合計値を計算
+        double V_sum = reduce(V.begin(), V.end());
+        Vn = Q / Cj + (C / (Cj * (legs * C + Cj))) * (Cj * V_sum - legs * Q);
     }
 
     //-----------ゲッター------------//
@@ -140,11 +147,11 @@
         return legs;
     }
 
-
     // テスト用idCounterゲッター
     int SEO::getidCounter() const {
         return idCounter;
     }
+
     // テスト用dEセッター
     void SEO::setdE(const string& direction, double value){
         dE[direction] = value;

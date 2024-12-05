@@ -8,7 +8,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <random>
-
+#include <memory>
 
 #define e 0.1602 // 電子の電荷
 
@@ -16,8 +16,6 @@ using namespace std;
 
 class SEO {
 private:
-    static int idCounter;   // 静的IDカウンタ
-    int id;                 // ノードのID
     double Q;               // ノード電荷
     double Vn;              // ノード電圧
     double Vd;              // バイアス電圧
@@ -30,7 +28,7 @@ private:
     map<string, double> dE; // エネルギー変化量(up, down)
     map<string, double> wt; // トンネル待時間(up, down)
     string tunnel;          // トンネルの有無("", up, down)
-    vector<int> connection; // 接続されている素子のID
+    vector<shared_ptr<SEO>> connection; // 接続されている素子のポインタ
 
 public:
     //-----------コンストラクタ---------// 
@@ -45,6 +43,9 @@ public:
 
     // 接続情報を設定
     void setConnections(const vector<int>& connections);
+
+    // 接続情報を追加
+    void SEO::addConnection(const shared_ptr<SEO>& connectedSEO);
 
     // 周囲の電圧を設定
     void setSurroundingVoltages(const vector<SEO>& SEOs);

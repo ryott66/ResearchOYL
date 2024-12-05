@@ -1,7 +1,4 @@
 #include "seo_class.hpp"
-    // 静的カウンタの初期化
-    int SEO::idCounter = 0;
-
     // コンストラクタ（パラメータの初期設定）
     SEO::SEO() :R(0), Rj(0), Cj(0), C(0), Vd(0), Q(0), Vn(0), legs(0) {
         dE["up"] = 0.0;
@@ -13,8 +10,7 @@
 
     SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
         : R(r), Rj(rj), Cj(cj), C(c), Vd(vd), Q(0.0), Vn(0.0), legs(legscounts), 
-        V(legscounts, 0.0), connection(legscounts, 0){
-        id = idCounter++;
+        V(legscounts, 0.0), connection(legscounts){
         dE["up"] = 0.0;
         dE["down"] = 0.0;
         wt["up"] = 0.0;
@@ -29,28 +25,33 @@
         Vd = vd;
     }
 
-    // 接続情報を設定
-    void SEO::setConnections(const vector<int>& connections) {
-        if (connections.size() != legs) {
-            throw invalid_argument("The size of connections must match the number of legs.");
-        }
-        connection = connections;
+    // // 接続情報を設定
+    // void SEO::setConnections(const vector<int>& connections) {
+    //     if (connections.size() != legs) {
+    //         throw invalid_argument("The size of connections must match the number of legs.");
+    //     }
+    //     connection = connections;
+    // }
+
+    // 接続情報を追加
+    void SEO::addConnection(const shared_ptr<SEO>& connectedSEO) {
+        connection.push_back(connectedSEO);
     }
 
-    // 周囲の電圧を設定
-    void SEO::setSurroundingVoltages(const vector<SEO>& SEOs) {
-        if (connection.size() != legs) {
-            throw invalid_argument("The number of legs does not match the connection size.");
-        }
+    // // 周囲の電圧を設定
+    // void SEO::setSurroundingVoltages(const vector<SEO>& SEOs) {
+    //     if (connection.size() != legs) {
+    //         throw invalid_argument("The number of legs does not match the connection size.");
+    //     }
 
-        for (size_t i = 0; i < connection.size(); i++) {
-            int connectedID = connection[i];  // 接続されている素子のID
-            if (connectedID >= SEOs.size() || connectedID < 0) {
-                throw out_of_range("Invalid connection ID.");
-            }
-            V[i] = SEOs[connectedID].getNodeVoltage();  // 接続先のVnを取得して設定
-        }
-    }
+    //     for (size_t i = 0; i < connection.size(); i++) {
+    //         int connectedID = connection[i];  // 接続されている素子のID
+    //         if (connectedID >= SEOs.size() || connectedID < 0) {
+    //             throw out_of_range("Invalid connection ID.");
+    //         }
+    //         V[i] = SEOs[connectedID].getNodeVoltage();  // 接続先のVnを取得して設定
+    //     }
+    // }
 
     // 振動子のパラメータ計算
     void SEO::setPcalc(){
@@ -60,10 +61,6 @@
     }
 
     //-----------ゲッター------------//
-    // IDを取得
-    int SEO::getID() const {
-        return id;
-    }
     
     // ノード電圧を取得
     double SEO::getNodeVoltage() const {
@@ -147,10 +144,6 @@
         return legs;
     }
 
-    // テスト用idCounterゲッター
-    int SEO::getidCounter() const {
-        return idCounter;
-    }
 
     // テスト用dEセッター
     void SEO::setdE(const string& direction, double value){

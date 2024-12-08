@@ -10,7 +10,7 @@
 
     SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
         : R(r), Rj(rj), Cj(cj), C(c), Vd(vd), Q(0.0), Vn(0.0), legs(legscounts), 
-        V(legscounts, 0.0), connection(legscounts){
+        V(legscounts, 0.0), connection(0){
         dE["up"] = 0.0;
         dE["down"] = 0.0;
         wt["up"] = 0.0;
@@ -25,16 +25,14 @@
         Vd = vd;
     }
 
-    // // 接続情報を設定
-    // void SEO::setConnections(const vector<int>& connections) {
-    //     if (connections.size() != legs) {
-    //         throw invalid_argument("The size of connections must match the number of legs.");
-    //     }
-    //     connection = connections;
-    // }
-
-    // 接続情報を追加
-    void SEO::addConnection(const shared_ptr<SEO>& connectedSEO) {
+    // 接続情報を設定
+    void SEO::setConnection(const shared_ptr<SEO>& connectedSEO) {
+        if(connection.size() > legs){
+            throw invalid_argument("The size of connections must match the number of legs.");
+        }
+        if (this == connectedSEO.get()) {
+            throw invalid_argument("Cannot connect to itself.");
+        }
         connection.push_back(connectedSEO);
     }
 
@@ -71,6 +69,11 @@
     // 電荷の更新
     void SEO::updateCharge(double dt) {
         Q += dt * (Vd - Vn) / R;
+    }
+
+    // 接続されてる振動子を取得
+    vector<shared_ptr<SEO>> SEO::getConnection() const {
+        return connection;
     }
 
     // ノード電圧の計算

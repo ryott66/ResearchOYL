@@ -41,11 +41,8 @@ public:
     // バイアス電圧を設定
     void setVias(const double vd);
 
-    // 接続情報を設定
-    void setConnections(const vector<int>& connections);
-
     // 接続情報を追加
-    void SEO::addConnection(const shared_ptr<SEO>& connectedSEO);
+    void setConnection(const shared_ptr<SEO>& connectedSEO);
 
     // 周囲の電圧を設定
     void setSurroundingVoltages(const vector<SEO>& SEOs);
@@ -59,6 +56,9 @@ public:
     
     // ノード電圧を取得
     double getNodeVoltage() const;
+
+    // 接続されてる振動子を取得
+    vector<shared_ptr<SEO>> getConnection() const;
 
     // 電荷の更新
     void updateCharge(double dt);

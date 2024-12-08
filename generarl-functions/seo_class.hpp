@@ -51,12 +51,9 @@ public:
     // 振動子のパラメータ計算
     void setPcalc();
 
-    //-----------ゲッター------------//
-    // IDを取得
-    int getID() const;
-    
+    //-----------ゲッター------------//    
     // ノード電圧を取得
-    double getNodeVoltage() const;
+    double getVn() const;
 
     // 接続されてる振動子を取得
     vector<shared_ptr<SEO>> getConnection() const;
@@ -107,6 +104,9 @@ public:
 
     // テスト用Vnセッター
     void setVn(double vn);
+
+    // テスト用Qnセッター
+    void setQn(double qn);
 
     // テスト用wtゲッター
     double getWT(const string& direction) const;

@@ -71,7 +71,7 @@ void SEO::setPcalc()
 //-----------ゲッター------------//
 
 // ノード電圧を取得
-double SEO::getNodeVoltage() const
+double SEO::getVn() const
 {
     return Vn;
 }
@@ -190,6 +190,12 @@ void SEO::setdE(const string &direction, double value)
 void SEO::setVn(double vn)
 {
     Vn = vn;
+}
+
+// テスト用Qnセッター
+void SEO::setQn(double qn)
+{
+    Q = qn;
 }
 
 // テスト用wtゲッター

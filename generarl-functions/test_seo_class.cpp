@@ -97,7 +97,40 @@ TEST_F(SEOTest, SetSurroundingVoltages) {
     EXPECT_DOUBLE_EQ(surroundingVoltages.at(1), 2); // [0][1][0] のノード電圧
     EXPECT_DOUBLE_EQ(surroundingVoltages.at(2), 3); // [0][0][1] のノード電圧
 }
+
 // テストケース: パラメータ計算の動作確認
+TEST_F(SEOTest, SetPcalc) {
+    // 振動子を選択(r=1,rj=0.001,cj=18,c=2,vd=0.007,legs=3)
+    auto oscillator = (*seoGrid).at(0).at(0).at(0);
+
+    // 初期パラメータ設定
+    oscillator->setQn(2);   // 電荷量
+
+    // 接続のノード電圧を設定
+    (*seoGrid).at(1).at(0).at(0)->setVn(1);
+    (*seoGrid).at(0).at(1).at(0)->setVn(2);
+    (*seoGrid).at(0).at(0).at(1)->setVn(3);
+    // 周囲の電圧を設定
+    (*seoGrid).at(0).at(0).at(0)->setSurroundingVoltages();
+
+    // パラメータ計算
+    oscillator->setPcalc();
+
+    // ノード電圧計算: Vn = Q / Cj + (C / (Cj * (legs * C + Cj))) * (Cj * V_sum - legs * Q)
+    double expectedVn = 2.0 / 18.0 + (2.0 / (18.0 * (3 * 2.0 + 18.0))) * (18.0 * 6.0 - 3 * 2.0);
+    EXPECT_DOUBLE_EQ(oscillator->getVn(), expectedVn);
+
+    // 旧式の方法での計算を確認
+    // q1 = (C * (-Q + Cj * V1 + C * (2 * V1 - V2 - V3))) / (3 * C + Cj);
+    double q1 = (2.0 * (-2.0 + 18.0 * 1.0 + 2.0 * (2 * 1.0 - 2.0 - 3.0))) / (3 * 2.0 + 18.0);
+    // q2 = -((C * (Q - Cj * V2 + C * (V1 - 2 * V2 + V3))) / (3 * C + Cj));
+    double q2 = -((2.0 * (2.0 - 18.0 * 2.0 + 2.0 * (1.0 - 2 * 2.0 + 3.0))) / (3 * 2.0 + 18.0));
+    // q3 = -((C * (Q + C * (V1 + V2 - 2 * V3) - Cj * V3)) / (3 * C + Cj));
+    double q3 = -((2.0 * (2.0 + 2.0 * (1.0 + 2.0 - 2 * 3.0) - 18.0 * 3.0)) / (3 * 2.0 + 18.0));
+    // calcVn = (Q + q1 + q2 + q3) / Cj;
+    double calcVn = (2.0 + q1 + q2 + q3) / 18.0;
+    EXPECT_DOUBLE_EQ(oscillator->getVn(), calcVn);
+}
 
 // テストケース: calculateTunnelWt の動作確認
 TEST_F(SEOTest, CalculateTunnelWt)

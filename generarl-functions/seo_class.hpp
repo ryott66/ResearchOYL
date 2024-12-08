@@ -10,7 +10,8 @@
 #include <random>
 #include <memory>
 
-#define e 0.1602 // 電子の電荷
+constexpr double e = 0.1602; // 電子の電荷量
+
 
 using namespace std;
 
@@ -41,11 +42,11 @@ public:
     // バイアス電圧を設定
     void setVias(const double vd);
 
-    // 接続情報を追加
-    void setConnection(const shared_ptr<SEO>& connectedSEO);
+    // 接続情報を設定
+    void setConnections(const vector<shared_ptr<SEO>> &connectedSEOs);
 
     // 周囲の電圧を設定
-    void setSurroundingVoltages(const vector<SEO>& SEOs);
+    void setSurroundingVoltages();
 
     // 振動子のパラメータ計算
     void setPcalc();

@@ -49,10 +49,6 @@ void SEO::setConnections(const vector<shared_ptr<SEO>> &connectedSEOs)
 // 周囲の電圧を設定
 void SEO::setSurroundingVoltages()
 {
-    if (connection.size() != legs)
-    {
-        throw invalid_argument("The number of legs does not match the connection size.");
-    }
     V.clear();
     for (auto x : connection)
     {
@@ -60,22 +56,9 @@ void SEO::setSurroundingVoltages()
     }
     if (V.size() != connection.size())
     {
-        throw invalid_argument("The number of legs does not match the connection size.");
+        throw invalid_argument("The number of legs does not match the V size.");
     }
 }
-
-//     if (connection.size() != legs) {
-//         throw invalid_argument("The number of legs does not match the connection size.");
-//     }
-
-//     for (size_t i = 0; i < connection.size(); i++) {
-//         int connectedID = connection[i];  // 接続されている素子のID
-//         if (connectedID >= SEOs.size() || connectedID < 0) {
-//             throw out_of_range("Invalid connection ID.");
-//         }
-//         V[i] = SEOs[connectedID].getNodeVoltage();  // 接続先のVnを取得して設定
-//     }
-// }
 
 // 振動子のパラメータ計算
 void SEO::setPcalc()
@@ -103,6 +86,12 @@ void SEO::updateCharge(double dt)
 vector<shared_ptr<SEO>> SEO::getConnection() const
 {
     return connection;
+}
+
+// 接続されてる振動子の電圧を取得
+vector<double> SEO::getSurroundingVoltages() const
+{
+    return V;
 }
 
 // ノード電圧の計算
@@ -195,6 +184,12 @@ int SEO::getlegs() const
 void SEO::setdE(const string &direction, double value)
 {
     dE[direction] = value;
+}
+
+// テスト用Vnセッター
+void SEO::setVn(double vn)
+{
+    Vn = vn;
 }
 
 // テスト用wtゲッター

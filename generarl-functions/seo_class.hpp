@@ -61,6 +61,9 @@ public:
     // 接続されてる振動子を取得
     vector<shared_ptr<SEO>> getConnection() const;
 
+    // 接続されてる振動子の電圧を取得
+    vector<double> getSurroundingVoltages() const;
+
     // 電荷の更新
     void updateCharge(double dt);
 
@@ -101,6 +104,9 @@ public:
 
     // テスト用dEセッター
     void setdE(const string& direction, double value);
+
+    // テスト用Vnセッター
+    void setVn(double vn);
 
     // テスト用wtゲッター
     double getWT(const string& direction) const;

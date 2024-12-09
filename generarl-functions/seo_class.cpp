@@ -76,7 +76,7 @@ void SEO::setdEcalc()
 }
 
 // 電荷の更新
-void SEO::setNodeCharge(double dt)
+void SEO::setNodeCharge(const double dt)
 {
     Q += (Vd - Vn) * dt / R;
 }
@@ -99,6 +99,23 @@ void SEO::calculateTunnelWt()
     else
     {
         wt["down"] = 0;
+    }
+}
+
+// 振動子のトンネル
+void SEO::setTunnel(const string direction)
+{
+    if (direction == "up")
+    {
+        Q += -e;
+    }
+    else if (direction == "down")
+    {
+        Q += e;
+    }
+    else
+    {
+        throw invalid_argument("Invalid tunnel direction");
     }
 }
 //-----------ゲッター------------//
@@ -211,7 +228,7 @@ void SEO::setVn(double vn)
 }
 
 // テスト用Qnセッター
-void SEO::setQn(double qn)
+void SEO::setQ(double qn)
 {
     Q = qn;
 }

@@ -55,10 +55,13 @@ public:
     void setdEcalc();
 
     // 電荷の更新
-    void setNodeCharge(double dt);
+    void setNodeCharge(const double dt);
 
     // トンネル待ち時間計算
     void calculateTunnelWt();
+
+    // 振動子のトンネル
+    void setTunnel(const string direction);
 
     //-----------ゲッター------------//    
     // ノード電圧を取得
@@ -117,7 +120,7 @@ public:
     void setVn(double vn);
 
     // テスト用Qnセッター
-    void setQn(double qn);
+    void setQ(double qn);
 
     // テスト用wtゲッター
     double getWT(const string& direction) const;

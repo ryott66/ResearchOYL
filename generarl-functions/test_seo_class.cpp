@@ -159,6 +159,32 @@ TEST_F(SEOTest, SetdEcalc) {
     EXPECT_DOUBLE_EQ(oscillator->getdE()["down"], expected_dE_down);
 }
 
+// テストケース: 電荷チャージの動作確認
+TEST_F(SEOTest, SetNodeCharge) {
+    // 振動子を選択(r=1,rj=0.001,cj=18,c=2,vd=0.007,legs=3)
+    auto oscillator = (*seoGrid).at(0).at(0).at(0);
+
+    // 初期パラメータ設定
+    oscillator->setQn(0);   // 初期電荷
+    oscillator->setVn(3.0); // ノード電圧
+    double dt = 0.1;        // 時間ステップ
+
+    // 電荷を更新: Q += (Vd - Vn) * dt / R;
+
+    oscillator->setNodeCharge(dt);
+
+    // 期待値を計算
+    double expectedQ = 0.0 + (0.007 - 3.0) * dt / 1.0;
+
+    // 更新後のQを確認
+    EXPECT_DOUBLE_EQ(oscillator->getQ(), expectedQ);
+
+    // さらに更新して確認
+    oscillator->setNodeCharge(dt);
+    expectedQ += (0.007 - 3.0) * dt / 1.0; // 2回目の更新
+    EXPECT_DOUBLE_EQ(oscillator->getQ(), expectedQ);
+}
+
 // テストケース: calculateTunnelWt の動作確認
 TEST_F(SEOTest, CalculateTunnelWt)
 {

@@ -1,12 +1,11 @@
 #include "seo_class.hpp"
-// コンストラクタ（パラメータの初期設定）
+//------ コンストラクタ（パラメータの初期設定）---------//
 SEO::SEO() : R(0), Rj(0), Cj(0), C(0), Vd(0), Q(0), Vn(0), legs(0)
 {
     dE["up"] = 0.0;
     dE["down"] = 0.0;
     wt["up"] = 0.0;
     wt["down"] = 0.0;
-    tunnel = "";
 }
 
 SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
@@ -17,7 +16,6 @@ SEO::SEO(double r, double rj, double cj, double c, double vd, int legscounts)
     dE["down"] = 0.0;
     wt["up"] = 0.0;
     wt["down"] = 0.0;
-    tunnel = "";
     // cout << "SEO object created." << endl;
 }
 
@@ -77,6 +75,12 @@ void SEO::setdEcalc()
     dE["down"] = -e * (e + 2 * (Q + C * V_sum)) / (2 * (legs * C + Cj));
 }
 
+// 電荷の更新
+void SEO::setNodeCharge(double dt)
+{
+    Q += (Vd - Vn) * dt / R;
+}
+
 // トンネル待ち時間計算
 void SEO::calculateTunnelWt()
 {
@@ -90,7 +94,7 @@ void SEO::calculateTunnelWt()
     }
     if (dE["down"] > 0)
     {
-        wt["down"] = (e * e * Rj / dE["up"]) * log(1 / Random());
+        wt["down"] = (e * e * Rj / dE["down"]) * log(1 / Random());
     }
     else
     {
@@ -103,12 +107,6 @@ void SEO::calculateTunnelWt()
 double SEO::getVn() const
 {
     return Vn;
-}
-
-// 電荷の更新
-void SEO::updateCharge(double dt)
-{
-    Q += dt * (Vd - Vn) / R;
 }
 
 // 接続されてる振動子を取得
@@ -127,6 +125,12 @@ vector<double> SEO::getSurroundingVoltages() const
 map<string, double> SEO::getdE() const
 {
     return dE;
+}
+
+// Qの取得
+double SEO::getQ() const
+{
+    return Q;
 }
 
 // ノード電圧の計算

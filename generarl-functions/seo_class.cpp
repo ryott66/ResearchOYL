@@ -36,7 +36,7 @@ void SEO::setConnections(const vector<shared_ptr<SEO>> &connectedSEOs)
     {
         throw invalid_argument("The size of connections must match the number of legs.");
     }
-    for(const auto &seo : connectedSEOs)
+    for (const auto &seo : connectedSEOs)
     {
         if (this == seo.get())
         {
@@ -68,6 +68,35 @@ void SEO::setPcalc()
     Vn = Q / Cj + (C / (Cj * (legs * C + Cj))) * (Cj * V_sum - legs * Q);
 }
 
+// 振動子のエネルギー計算
+void SEO::setdEcalc()
+{
+    // V1,V2,・・・の合計値を計算
+    double V_sum = reduce(V.begin(), V.end());
+    dE["up"] = -e * (e - 2 * (Q + C * V_sum)) / (2 * (legs * C + Cj));
+    dE["down"] = -e * (e + 2 * (Q + C * V_sum)) / (2 * (legs * C + Cj));
+}
+
+// トンネル待ち時間計算
+void SEO::calculateTunnelWt()
+{
+    if (dE["up"] > 0)
+    {
+        wt["up"] = (e * e * Rj / dE["up"]) * log(1 / Random());
+    }
+    else
+    {
+        wt["up"] = 0;
+    }
+    if (dE["down"] > 0)
+    {
+        wt["down"] = (e * e * Rj / dE["up"]) * log(1 / Random());
+    }
+    else
+    {
+        wt["down"] = 0;
+    }
+}
 //-----------ゲッター------------//
 
 // ノード電圧を取得
@@ -94,6 +123,12 @@ vector<double> SEO::getSurroundingVoltages() const
     return V;
 }
 
+// dEの取得
+map<string, double> SEO::getdE() const
+{
+    return dE;
+}
+
 // ノード電圧の計算
 void SEO::calculateNodeVoltage()
 {
@@ -110,27 +145,6 @@ double SEO::calculateEnergyChange(bool isUp) const
 {
     return isUp ? e * (-e + 2 * Q) / (2 * (4 * C + Cj))
                 : -e * (e + 2 * Q) / (2 * (4 * C + Cj));
-}
-
-// トンネル待ち時間計算
-void SEO::calculateTunnelWt()
-{
-    if (dE["up"] > 0)
-    {
-        wt["up"] = (e * e * Rj / dE["up"]) * log(1 / Random());
-    }
-    else
-    {
-        wt["up"] = 0;
-    }
-    if (dE["down"] > 0)
-    {
-        wt["down"] = (e * e * Rj / dE["up"]) * log(1 / Random());
-    }
-    else
-    {
-        wt["down"] = 0;
-    }
 }
 
 //-------- 汎用処理 -------------//

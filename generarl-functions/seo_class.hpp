@@ -51,6 +51,12 @@ public:
     // 振動子のパラメータ計算
     void setPcalc();
 
+    // 振動子のエネルギー計算
+    void setdEcalc();
+
+    // トンネル待ち時間計算
+    void calculateTunnelWt();
+
     //-----------ゲッター------------//    
     // ノード電圧を取得
     double getVn() const;
@@ -61,6 +67,9 @@ public:
     // 接続されてる振動子の電圧を取得
     vector<double> getSurroundingVoltages() const;
 
+    // dEの取得
+    map<string, double> getdE() const;
+
     // 電荷の更新
     void updateCharge(double dt);
 
@@ -70,8 +79,7 @@ public:
     // エネルギー変化量の計算
     double calculateEnergyChange(bool isUp) const;
 
-    // トンネル待ち時間計算
-    void calculateTunnelWt();
+
 
     //-------- 汎用処理 -------------//
     // 0から1の間の乱数を生成

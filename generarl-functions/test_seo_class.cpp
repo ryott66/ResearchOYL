@@ -132,6 +132,33 @@ TEST_F(SEOTest, SetPcalc) {
     EXPECT_DOUBLE_EQ(oscillator->getVn(), calcVn);
 }
 
+// テストケース: エネルギー変化計算の動作確認
+TEST_F(SEOTest, SetdEcalc) {
+    // 振動子を選択(r=1,rj=0.001,cj=18,c=2,vd=0.007,legs=3)
+    auto oscillator = (*seoGrid).at(0).at(0).at(0);
+
+    // 初期パラメータ設定
+    oscillator->setQn(2);   // 電荷量
+
+    // 接続のノード電圧を設定
+    (*seoGrid).at(1).at(0).at(0)->setVn(1);
+    (*seoGrid).at(0).at(1).at(0)->setVn(2);
+    (*seoGrid).at(0).at(0).at(1)->setVn(3);
+    // 周囲の電圧を設定
+    (*seoGrid).at(0).at(0).at(0)->setSurroundingVoltages();
+
+    // パラメータ計算
+    oscillator->setdEcalc();
+
+    // エネルギー変化計算:
+    // dE["up"] = -e * (e - 2 * (Q + C * V_sum)) / (2 * (legs * C + Cj));
+    // dE["down"] = -e * (e + 2 * (Q + C * V_sum)) / (2 * (legs * C + Cj));
+    double expected_dE_up = -e * (e - 2 * (2.0 + 2.0 * 6.0)) / (2 * (3 * 2.0 + 18.0));
+    double expected_dE_down = -e * (e + 2 * (2.0 + 2.0 * 6.0)) / (2 * (3 * 2.0 + 18.0));
+    EXPECT_DOUBLE_EQ(oscillator->getdE()["up"], expected_dE_up);
+    EXPECT_DOUBLE_EQ(oscillator->getdE()["down"], expected_dE_down);
+}
+
 // テストケース: calculateTunnelWt の動作確認
 TEST_F(SEOTest, CalculateTunnelWt)
 {

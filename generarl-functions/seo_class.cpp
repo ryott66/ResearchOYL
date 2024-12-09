@@ -150,23 +150,6 @@ double SEO::getQ() const
     return Q;
 }
 
-// ノード電圧の計算
-void SEO::calculateNodeVoltage()
-{
-    double totalQ = Q;
-    for (const auto &v : V)
-    {
-        totalQ += C * v;
-    }
-    Vn = totalQ / Cj;
-}
-
-// エネルギー変化量の計算
-double SEO::calculateEnergyChange(bool isUp) const
-{
-    return isUp ? e * (-e + 2 * Q) / (2 * (4 * C + Cj))
-                : -e * (e + 2 * Q) / (2 * (4 * C + Cj));
-}
 
 //-------- 汎用処理 -------------//
 // 0から1の間の乱数を生成

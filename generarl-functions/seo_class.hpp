@@ -28,7 +28,6 @@ private:
     vector<double> V;       // 周囲のノード電圧
     map<string, double> dE; // エネルギー変化量(up, down)
     map<string, double> wt; // トンネル待時間(up, down)
-    // string tunnel;          // トンネルの有無("", up, down)
     vector<shared_ptr<SEO>> connection; // 接続されている素子のポインタ
 
 public:
@@ -78,14 +77,6 @@ public:
 
     // Qの取得
     double getQ() const;
-
-    // ノード電圧の計算
-    void calculateNodeVoltage();
-
-    // エネルギー変化量の計算
-    double calculateEnergyChange(bool isUp) const;
-
-
 
     //-------- 汎用処理 -------------//
     // 0から1の間の乱数を生成

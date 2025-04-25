@@ -38,6 +38,9 @@ int main()
             seo->setConnections(connections);
         }
     }
+
+    // ああああ
+    
     Sim sim(dt, endtime);
     sim.addGrid({grid});
     // 時刻150ns〜150.1nsの間、(1,1)の素子に0.006Vを加える

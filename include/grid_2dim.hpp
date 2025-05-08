@@ -89,7 +89,7 @@ public:
 template <typename Element>
 Grid2D<Element>::Grid2D(int rows, int cols, bool enableOutput)
     : rows_(rows), cols_(cols), grid(rows, std::vector<std::shared_ptr<Element>>(cols)),
-      outputEnabled(enableOutput)
+      outputEnabled(enableOutput)   //「::」は名前空間の設定、「:」はメンバの初期化
 {
     if (rows <= 0 || cols <= 0)
     {

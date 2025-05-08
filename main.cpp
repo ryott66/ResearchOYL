@@ -38,8 +38,6 @@ int main()
             seo->setConnections(connections);
         }
     }
-
-//aaaa
     
     Sim sim(dt, endtime);
     sim.addGrid({grid});

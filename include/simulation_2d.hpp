@@ -280,7 +280,7 @@ const std::map<std::string, std::vector<std::vector<std::vector<double>>>> &Simu
 
 template <typename Element>
 void Simulation2D<Element>::addVoltageTrigger(double triggerTime, Grid2D<Element>* grid, int x, int y, double voltage) {
-    voltageTriggers.emplace_back(grid, triggerTime, x, y, voltage);
+    voltageTriggers.emplace_back(grid, triggerTime, x, y, voltage);  //.empalce_backでVoltage_triggersに新たに追加
 }
 
 template <typename Element>

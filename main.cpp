@@ -22,7 +22,7 @@ int main()
     Grid grid(size_y, size_x, true);
     grid.setOutputLabel("seo");
 
-    // SEO初期化と接続
+    SEO初期化と接続
     for (int y = 0; y < size_y; ++y)
     {
         for (int x = 0; x < size_x; ++x)

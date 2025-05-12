@@ -18,7 +18,7 @@ constexpr double Rj = 0.002;
 constexpr double Cj = 10.0;
 constexpr double C = 2.0;
 constexpr double dt = 0.1;
-constexpr double endtime = 30;
+constexpr double endtime = 200;
 
 
 
@@ -60,9 +60,8 @@ int main()
     Sim sim(dt, endtime);
     sim.addGrid({grid});
     // 時刻150ns〜150.1nsの間、(1,1)の素子に0.006Vを加える
-    sim.addVoltageTrigger(150, &grid, 1, 1, 0.06);
+    // sim.addVoltageTrigger(150, &grid, 1, 1, 0.06);
     sim.run();
-    // std::cout << "シミュレーションランはスキップしました" << std::endl;
 
 
     // 出力処理
@@ -80,8 +79,6 @@ int main()
         video.set_fps(30.0);
         // video.set_scaleBar(1).set_cellsize(20);
         video.makevideo();
-        // std::cout << "動画生成はスキップしました" << std::endl;
-
     }
     else
     {
